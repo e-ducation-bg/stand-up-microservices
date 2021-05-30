@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+    postgresdb:
+        image: postgres
+        restart: on-failure
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - PGDATA=/var/lib/postgresql/data/database
+        volumes:
+            - ./app/db_data/postgres:/var/lib/postgresql/data/database
+    couchdb:
+        image: couchdb:3
+        restart: on-failure
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=password
+        volumes:
+            - ./app/db_data/couchDB:/opt/couchdb/data
+        # ports:
+        #     - "5984:5984"
+    couchdb_initializer:
+        image: curlimages/curl
+        restart: on-failure
+        depends_on:
+            - couchdb
+        command: ["sh","-c","sleep 15 && curl -u admin:password -X PUT couchdb:5984/_replicator && curl -u admin:password -X PUT couchdb:5984/_users && curl -u admin:password -X PUT couchdb:5984/_global_changes"]        
+    frontend:
+        build: ./src/microservices-frontend
+        restart: on-failure
+        deploy:
+            replicas: 2
+    jwt:
+        build: ./src/jwt_issuer_public/
+        restart: on-failure
+        deploy:
+            replicas: 2
+        command: >
+            bash -c "cd /project/jwtController
+            && python3 manage.py makemigrations
+            && python3 manage.py migrate
+            && source /project/py-env/bin/activate
+            && gunicorn jwtController.wsgi:application --bind 0.0.0.0:8000 -w 8"
+        volumes:
+            - ./app/certificates:/project/certs
+        depends_on:
+            - postgresdb
+    images:
+        build: ./src/node-image-compression/
+        restart: on-failure
+        deploy:
+            replicas: 2
+        command: >
+            bash -c "NODE_ENV=production node index.js"
+        depends_on:
+            - couchdb_initializer
+            - jwt
+        volumes:
+            - ./app/certificates:/usr/src/app/certificates
+            - ./app/data/images_public:/usr/src/app/public_files
+            - ./app/data/images_private:/usr/src/app/private_files
+            - ./app/settings/image-compression:/usr/src/app/misc
+    proxy:
+        build: ./src/microservice-reverse-proxy
+        restart: on-failure
+        deploy:
+            replicas: 1
+        depends_on:
+            - images
+            - jwt
+        volumes:
+            - ./app/certificates:/etc/ssl/certs/
+        ports: 
+            - "8080:80"
+            - "8443:443"
