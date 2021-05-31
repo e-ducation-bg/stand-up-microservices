@@ -29,4 +29,5 @@ openssl req -x509 -nodes -newkey rsa:4096 -keyout app/certificates/private.key -
 openssl x509 -pubkey -noout -in app/certificates/public.crt  > app/certificates/public.pem
 
 # build images
-docker-compose build
+sudo docker-compose build
+sudo docker-compose push
