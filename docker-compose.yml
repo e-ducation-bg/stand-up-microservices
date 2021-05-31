@@ -29,11 +29,13 @@ services:
         command: ["sh","-c","sleep 15 && curl -u admin:password -X PUT couchdb:5984/_replicator && curl -u admin:password -X PUT couchdb:5984/_users && curl -u admin:password -X PUT couchdb:5984/_global_changes"]        
     frontend:
         build: ./src/microservices-frontend
+        image: 127.0.0.1:5000/frontend
         restart: on-failure
         deploy:
             replicas: 2
     jwt:
         build: ./src/jwt_issuer_public/
+        image: 127.0.0.1:5000/jwt
         restart: on-failure
         deploy:
             replicas: 2
@@ -49,6 +51,7 @@ services:
             - postgresdb
     images:
         build: ./src/node-image-compression/
+        image: 127.0.0.1:5000/images
         restart: on-failure
         deploy:
             replicas: 2
@@ -64,6 +67,7 @@ services:
             - ./app/settings/image-compression:/usr/src/app/misc
     proxy:
         build: ./src/microservice-reverse-proxy
+        image: 127.0.0.1:5000/proxy
         restart: on-failure
         deploy:
             replicas: 1
