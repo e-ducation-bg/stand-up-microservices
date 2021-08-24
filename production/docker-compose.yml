@@ -19,8 +19,6 @@ services:
             - COUCHDB_PASSWORD=password
         volumes:
             - ./app/db_data/couchDB:/opt/couchdb/data
-        ports:
-            - "5984:5984"
     couchdb_initializer:
         image: curlimages/curl
         restart: on-failure
@@ -32,13 +30,13 @@ services:
         image: 127.0.0.1:5000/frontend
         restart: on-failure
         deploy:
-            replicas: 1
+            replicas: 2
     jwt:
         build: ./src/jwt_issuer_public/
         image: 127.0.0.1:5000/jwt
         restart: on-failure
         deploy:
-            replicas: 1
+            replicas: 2
         volumes:
             - ./app/certificates:/project/certs
         depends_on:
@@ -48,9 +46,9 @@ services:
         image: 127.0.0.1:5000/images
         restart: on-failure
         deploy:
-            replicas: 1
+            replicas: 2
         command: >
-            bash -c "node index.js"
+            bash -c "NODE_ENV=production node index.js"
         depends_on:
             - jwt
         volumes:
