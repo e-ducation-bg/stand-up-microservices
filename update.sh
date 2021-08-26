@@ -13,5 +13,5 @@ git pull
 cd ../..
 
 # Update images
-sudo docker-compose build
+sudo docker-compose build --no-cache --parallel
 sudo docker-compose push
