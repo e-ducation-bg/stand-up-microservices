@@ -1,0 +1,24 @@
+jwt_issuer							postgres
+	app/certificates				"private.key, public.pem"
+
+proxy								N/A
+	app/certificates				"private.key, public.crt"
+
+images								couchdb
+	app/certificates				public.pem	
+	app/settings/image-compression	database_settings.json, service_accounts.json, settings.json	
+	app/data/images_public			*	
+	app/data/images_private			*	
+
+permissions							couchdb
+	app/certificates 				private.key, public.pem
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			

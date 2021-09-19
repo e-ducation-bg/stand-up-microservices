@@ -62,11 +62,23 @@ services:
             bash -c "node index.js"
         depends_on:
             - jwt
+            - couchdb_initializer
         volumes:
             - ./app/certificates:/usr/src/app/certificates
             - ./app/data/images_public:/usr/src/app/public_files
             - ./app/data/images_private:/usr/src/app/private_files
             - ./app/settings/image-compression:/usr/src/app/misc
+    permissions:
+        build: ./src/flask-permission-manager
+        image: 127.0.0.1:5000/permissions
+        restart: on-failure
+        deploy:
+            replicas: 1
+        depends_on:
+            - jwt
+            - postgresdb
+        volumes:
+            - ./app/certificates:/project/certs
     proxy:
         build: ./src/microservice-reverse-proxy
         image: 127.0.0.1:5000/proxy
