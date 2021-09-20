@@ -4,9 +4,11 @@ cd src/node-image-compression
 git pull
 cd ../jwt_issuer_public
 git pull
-cd ../microservices-frontend
+cd ../frontend
 git pull
 cd ../microservice-reverse-proxy
+git pull
+cd ../flask-permission-manager
 git pull
 
 # return to main dir
@@ -14,4 +16,4 @@ cd ../..
 
 # Update images
 sudo docker-compose build --no-cache --parallel
-sudo docker-compose push
+sudo docker-compose up

@@ -14,11 +14,11 @@ mkdir app/settings/image-compression
 # get repos
 mkdir src
 cd src
-git clone git@github.com:justitsi/node-image-compression.git
-git clone git@github.com:justitsi/jwt_issuer_public.git
-git clone git@github.com:justitsi/microservices-frontend.git
-git clone git@github.com:justitsi/microservice-reverse-proxy.git
-git clone git@github.com:justitsi/flask-permission-manager.git
+git clone git@github.com:e-ducation-bg/node-image-compression.git
+git clone git@github.com:e-ducation-bg/jwt_issuer_public.git
+git clone git@github.com:e-ducation-bg/frontend.git
+git clone git@github.com:e-ducation-bg/microservice-reverse-proxy.git
+git clone git@github.com:e-ducation-bg/flask-permission-manager.git
 cd ..
 
 # copy relevant conf files
@@ -31,4 +31,4 @@ openssl x509 -pubkey -noout -in app/certificates/public.crt  > app/certificates/
 
 # build images
 sudo docker-compose build --no-cache
-sudo docker-compose push
+sudo docker-compose up
