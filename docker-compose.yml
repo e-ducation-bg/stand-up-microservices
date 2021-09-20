@@ -92,5 +92,5 @@ services:
         volumes:
             - ./app/certificates:/etc/ssl/certs/
         ports: 
-            - "8080:80"
-            - "8443:443"
+            - "4480:80"
+            - "4443:443"
