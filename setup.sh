@@ -16,9 +16,10 @@ mkdir src
 cd src
 git clone git@github.com:e-ducation-bg/node-image-compression.git
 git clone git@github.com:e-ducation-bg/jwt_issuer_public.git
-git clone git@github.com:e-ducation-bg/frontend.git
 git clone git@github.com:e-ducation-bg/microservice-reverse-proxy.git
 git clone git@github.com:e-ducation-bg/flask-permission-manager.git
+git clone git@github.com:e-ducation-bg/frontend.git
+git clone git@github.com:e-ducation-bg/api.git
 cd ..
 
 # copy relevant conf files

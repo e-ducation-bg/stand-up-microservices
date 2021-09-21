@@ -10,6 +10,8 @@ cd ../microservice-reverse-proxy
 git pull
 cd ../flask-permission-manager
 git pull
+cd ../api
+git pull
 
 # return to main dir
 cd ../..

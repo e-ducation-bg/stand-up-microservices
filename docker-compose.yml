@@ -79,6 +79,18 @@ services:
             - postgresdb
         volumes:
             - ./app/certificates:/project/certs
+    api:
+        build: ./src/api
+        image: 127.0.0.1:5000/api
+        restart: on-failure
+        deploy:
+            replicas: 1
+        depends_on:
+            - jwt
+            - permissions
+            - postgresdb
+        volumes:
+            - ./app/certificates:/project/certs
     proxy:
         build: ./src/microservice-reverse-proxy
         image: 127.0.0.1:5000/proxy
@@ -88,6 +100,7 @@ services:
         depends_on:
             - images
             - jwt
+            - api
             - permissions
             - frontend
         volumes:
